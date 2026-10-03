@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pousada Rural Serra Verde | Reservas de Passeios</title>
+  <meta name="description"
+    content="Reserve seus passeios na Pousada Rural Serra Verde. Experiências por terra, água e ar.">
+  <link rel="icon" type="image/png" href="images/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: '#FBF9F4',
+              text: '#1E2322',
+              green: '#1E6B3E',
+              'green-light': '#E3EFE8',
+              blue: '#0E618B',
+              'blue-light': '#EDF7FB',
+              yellow: '#DDA526',
+              'yellow-light': '#FFF3D6',
+              red: '#B73338',
+              'red-light': '#FBE2DF',
+              border: 'rgba(0,0,0,0.06)'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Lora', 'serif'],
+          },
+          borderRadius: {
+            'xl': '1rem',
+            '2xl': '1.5rem',
+            '3xl': '2rem',
+          },
+          boxShadow: {
+            'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+            'float': '0 20px 40px -10px rgba(0,0,0,0.15)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-brand-bg text-brand-text font-sans antialiased relative selection:bg-brand-green selection:text-white">
+
+  <!-- Header -->
+  <header
+    class="fixed top-0 left-0 right-0 z-40 bg-white shadow-sm border-b border-brand-border transition-all duration-300"
+    id="main-header">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 h-20 grid grid-cols-2 lg:grid-cols-3 items-center">
+      <!-- Left: Logo -->
+      <div class="flex justify-start items-center">
+        <a href="#" class="block group">
+          <img src="images/logo.png" alt="Pousada Rural Serra Verde"
+            class="h-12 w-auto object-contain align-middle rounded-md transition-transform group-hover:scale-105">
+        </a>
+      </div>
+
+      <!-- Center: Desktop Nav -->
+      <div class="hidden lg:flex justify-center items-center">
+        <nav class="flex items-center gap-8">
+          <a href="#passeios"
+            class="text-sm font-medium text-brand-text/70 hover:text-brand-green transition-colors">Passeios</a>
+          <a href="#experiencias"
+            class="text-sm font-medium text-brand-text/70 hover:text-brand-green transition-colors">Experiências</a>
+          <a href="#seguranca"
+            class="text-sm font-medium text-brand-text/70 hover:text-brand-green transition-colors">Segurança</a>
+          <a href="#avaliacoes"
+            class="text-sm font-medium text-brand-text/70 hover:text-brand-green transition-colors">Avaliações</a>
+        </nav>
+      </div>
+
+      <!-- Right: Actions & Mobile Btn -->
+      <div class="flex justify-end items-center gap-4">
+        <div class="hidden md:flex items-center gap-4">
+          <button
+            class="text-sm font-medium text-brand-text/80 hover:text-brand-text transition-colors flex items-center gap-2"
+            onclick="openMyReservations()">
+            <i class="ph ph-calendar-check text-lg"></i>
+            Minhas Reservas
+          </button>
+          <a href="#passeios" class="btn-primary text-sm px-6 py-2.5 rounded-full flex items-center gap-2 font-medium">
+            Reservar Passeio
+          </a>
+        </div>
+
+        <!-- Mobile Menu Btn -->
+        <button class="lg:hidden text-2xl text-brand-text p-2" id="mobile-menu-btn">
+          <i class="ph ph-list"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section
+    class="relative pt-32 pb-40 lg:pt-40 lg:pb-48 px-4 flex items-center justify-center min-h-[85vh] overflow-hidden">
+    <!-- Background -->
+    <div class="absolute inset-0 w-full h-full bg-black">
+      <img src="images/background1.jpeg" alt="Paisagem Serra Verde 1" class="hero-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100">
+      <img src="images/background2.jpeg" alt="Paisagem Serra Verde 2" class="hero-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0">
+      <img src="images/background3.jpeg" alt="Paisagem Serra Verde 3" class="hero-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0">
+      <div class="absolute inset-0 z-10"
+        style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.7)); pointer-events: none;"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 text-center max-w-4xl mx-auto px-4 mt-8 flex flex-col items-center">
+      <span
+        class="inline-block py-1 px-3 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm text-white text-xs font-semibold tracking-wider mb-6 animate-fade-in-up">DESCUBRA
+        A NATUREZA</span>
+      <h1
+        class="text-4xl md:text-6xl lg:text-7xl font-serif font-medium tracking-tight text-white mb-6 leading-tight drop-shadow-md animate-fade-in-up"
+        style="animation-delay: 100ms;">
+        Viva a Natureza de <br><em class="text-brand-yellow-light font-medium italic">Todos os Ângulos</em>
+      </h1>
+      <p class="text-lg md:text-xl text-white/90 mb-10 font-light max-w-2xl mx-auto drop-shadow-sm animate-fade-in-up"
+        style="animation-delay: 200ms;">
+        Experiências exclusivas e inesquecíveis por terra e água aguardam por você na Pousada Serra Verde.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md mx-auto animate-fade-in-up"
+        style="animation-delay: 300ms;">
+        <a href="#passeios"
+          class="bg-white hover:bg-[#FBF9F4] text-[#1E6B3E] font-semibold rounded-full px-7 py-3.5 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
+          Explorar Passeios <i class="ph ph-compass text-lg"></i>
+        </a>
+        <a href="#"
+          class="bg-white/10 backdrop-blur-md hover:bg-white/20 border border-white/30 text-white font-medium rounded-full px-7 py-3.5 transition-all flex items-center justify-center gap-2">
+          Falar no WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <a href="#passeios"
+      class="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/70 hover:text-white transition-colors animate-bounce flex flex-col items-center gap-2 z-20">
+      <span class="text-xs font-medium tracking-widest uppercase">Deslize</span>
+      <i class="ph ph-arrow-down text-xl"></i>
+    </a>
+  </section>
+
+  <!-- Vitrine de Passeios -->
+  <section id="passeios" class="py-16 px-4 max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-serif font-medium tracking-tight text-brand-text mb-4">Nossas Experiências</h2>
+      <p class="text-brand-text/70 max-w-2xl mx-auto">Selecione uma das nossas modalidades e prepare-se para viver
+        momentos inesquecíveis em meio à natureza.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Card 1: Terra -->
+      <article
+        class="tour-card bg-white rounded-2xl overflow-hidden shadow-sm border border-brand-border group flex flex-col cursor-pointer transition-transform duration-300 hover:-translate-y-2"
+        onclick="openModal('horse')">
+        <div class="relative h-72 overflow-hidden bg-gray-100">
+          <img src="images/pousada.jpg" alt="Trilha e Cavalgada Rural"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+          <div
+            class="absolute top-4 left-4 bg-brand-green-light/90 text-brand-green text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+            Por Terra
+          </div>
+        </div>
+        <div class="p-6 flex flex-col flex-1">
+          <h3 class="text-2xl font-serif font-medium tracking-tight mb-2 group-hover:text-brand-green transition-colors">Cavalgada ao
+            Pôr do Sol</h3>
+          <p class="text-sm text-brand-text/70 mb-6 line-clamp-2">Uma trilha suave pelas montanhas da propriedade,
+            terminando com um mirante espetacular para o pôr do sol.</p>
+
+          <div class="flex items-center gap-4 text-sm text-brand-text/80 mb-6 font-medium flex-wrap">
+            <div class="flex items-center gap-1.5 bg-brand-bg py-1.5 px-3 rounded-lg whitespace-nowrap"><i
+                class="ph ph-clock text-brand-green text-lg"></i> 2h</div>
+            <div class="flex items-center gap-1.5 bg-brand-bg py-1.5 px-3 rounded-lg whitespace-nowrap"><i
+                class="ph ph-users text-brand-green text-lg"></i> Até 8 pessoas</div>
+            <div class="flex items-center gap-1.5 bg-brand-bg py-1.5 px-3 rounded-lg whitespace-nowrap"><i
+                class="ph ph-compass text-brand-green text-lg"></i> Guia incluso</div>
+          </div>
+
+          <div class="mt-auto pt-6 border-t border-brand-border flex items-center justify-between">
+            <div>
+              <span class="text-xs text-brand-text/60 uppercase tracking-wide block mb-0.5">A partir de</span>
+              <span class="text-xl font-bold text-brand-text">R$ 90<span
+                  class="text-sm font-normal text-brand-text/60">/pessoa</span></span>
+            </div>
+            <button
+              class="bg-brand-green text-white hover:bg-brand-green/90 w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-md">
+              <i class="ph ph-arrow-right text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2: Água -->
+      <article
+        class="tour-card bg-white rounded-2xl overflow-hidden shadow-sm border border-brand-border group flex flex-col cursor-pointer transition-transform duration-300 hover:-translate-y-2"
+        onclick="openModal('boat')">
+        <div class="relative h-72 overflow-hidden bg-gray-100">
+          <img src="images/pousada2.jpg" alt="Passeio de Lancha na Represa"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+          <div
+            class="absolute top-4 left-4 bg-brand-blue-light/90 text-brand-blue text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+            Por Água
+          </div>
+        </div>
+        <div class="p-6 flex flex-col flex-1">
+          <h3 class="text-2xl font-serif font-medium tracking-tight mb-2 group-hover:text-brand-blue transition-colors">Passeio de
+            Lancha VIP</h3>
+          <p class="text-sm text-brand-text/70 mb-6 line-clamp-2">Navegue pelas águas cristalinas do lago em uma lancha
+            premium com paradas para banho e brinde especial.</p>
+
+          <div class="flex items-center gap-4 text-sm text-brand-text/80 mb-6 font-medium flex-wrap">
+            <div class="flex items-center gap-1.5 bg-brand-bg py-1.5 px-3 rounded-lg whitespace-nowrap"><i
+                class="ph ph-clock text-brand-blue text-lg"></i> 3h</div>
+            <div class="flex items-center gap-1.5 bg-brand-bg py-1.5 px-3 rounded-lg whitespace-nowrap"><i
+                class="ph ph-users text-brand-blue text-lg"></i> Até 6 pessoas</div>
+            <div class="flex items-center gap-1.5 bg-brand-bg py-1.5 px-3 rounded-lg whitespace-nowrap"><i
+                class="ph ph-anchor text-brand-blue text-lg"></i> Paradas + Marinheiro</div>
+          </div>
+
+          <div class="mt-auto pt-6 border-t border-brand-border flex items-center justify-between">
+            <div>
+              <span class="text-xs text-brand-text/60 uppercase tracking-wide block mb-0.5">A partir de</span>
+              <span class="text-xl font-bold text-brand-text">R$ 250<span
+                  class="text-sm font-normal text-brand-text/60">/pessoa</span></span>
+            </div>
+            <button
+              class="bg-brand-blue text-white hover:bg-brand-blue/90 w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-md">
+              <i class="ph ph-arrow-right text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3: Day-Use -->
+      <article
+        class="tour-card bg-white rounded-2xl overflow-hidden shadow-sm border border-brand-border group flex flex-col cursor-pointer transition-transform duration-300 hover:-translate-y-2"
+        onclick="openModal('dayuse')">
+        <div class="relative h-72 overflow-hidden bg-gray-100">
+          <img src="images/dayuse1.jpg" alt="Day-Use na Pousada"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+          <div
+            class="absolute top-4 left-4 bg-brand-yellow-light/90 text-brand-yellow text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+            Lazer
+          </div>
+        </div>
+        <div class="p-6 flex flex-col flex-1">
+          <h3 class="text-2xl font-serif font-medium tracking-tight mb-2 group-hover:text-brand-yellow transition-colors">Day-Use
+            Serra Verde</h3>
+          <p class="text-sm text-brand-text/70 mb-6 line-clamp-2">Venha passar o dia na pousada serra verde, com acesso a 2 piscinas, restaurante no local e 7 cachoeiras.</p>
+
+          <div class="flex items-center gap-4 text-sm text-brand-text/80 mb-6 font-medium flex-wrap">
+            <div class="flex items-center gap-1.5 bg-brand-bg py-1.5 px-3 rounded-lg whitespace-nowrap"><i
+                class="ph ph-clock text-brand-yellow text-lg"></i> 08h às 18h</div>
+            <div class="flex items-center gap-1.5 bg-brand-bg py-1.5 px-3 rounded-lg whitespace-nowrap"><i
+                class="ph ph-sun text-brand-yellow text-lg"></i> Piscinas e Cachoeiras</div>
+          </div>
+
+          <div class="mt-auto pt-6 border-t border-brand-border flex items-center justify-between">
+            <div>
+              <span class="text-xs text-brand-text/60 uppercase tracking-wide block mb-0.5">A partir de</span>
+              <span class="text-xl font-bold text-brand-text">R$ 50<span
+                  class="text-sm font-normal text-brand-text/60">/pessoa</span></span>
+            </div>
+            <button
+              class="bg-brand-yellow text-white hover:bg-brand-yellow/90 w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-md">
+              <i class="ph ph-arrow-right text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4: Hospedagem -->
+      <article
+        class="tour-card bg-white rounded-2xl overflow-hidden shadow-sm border border-brand-border group flex flex-col md:flex-row transition-transform duration-300 hover:-translate-y-2 lg:col-span-3 md:col-span-2 mt-4">
+        <div class="relative w-full md:w-2/5 h-72 md:h-auto overflow-hidden bg-gray-100">
+          <img src="images/background1.jpeg" alt="Hospedagem na Pousada"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+          <div
+            class="absolute top-4 left-4 bg-brand-text/90 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+            Hospedagem
+          </div>
+        </div>
+        <div class="p-6 md:p-8 flex flex-col flex-1 justify-center">
+          <h3 class="text-3xl font-serif font-medium tracking-tight mb-4 group-hover:text-brand-text/80 transition-colors">Acomodações e Chalés</h3>
+          <p class="text-brand-text/70 mb-6 leading-relaxed">
+            Acorde com o canto dos pássaros e desfrute de todo o conforto da Pousada Serra Verde. Oferecemos opções integradas à natureza para o seu descanso perfeito.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+            <div class="bg-brand-bg p-5 rounded-xl border border-brand-border flex flex-col">
+              <h4 class="font-medium text-lg mb-2 flex items-center gap-2"><i class="ph ph-bed text-brand-green text-xl"></i> Quartos</h4>
+              <p class="text-sm text-brand-text/70 mb-3 flex-1">Conforto para até 4 pessoas.</p>
+              <p class="text-brand-text font-bold text-lg mb-4">A partir de R$ 350,00</p>
+              <button onclick="openModal('quarto')" class="w-full bg-brand-text text-white hover:bg-black py-2.5 rounded-lg flex justify-center items-center gap-2 font-medium transition-colors shadow-sm">
+                Ver Quartos <i class="ph ph-arrow-right"></i>
+              </button>
+            </div>
+            <div class="bg-brand-bg p-5 rounded-xl border border-brand-border flex flex-col">
+              <h4 class="font-medium text-lg mb-2 flex items-center gap-2"><i class="ph ph-house text-brand-green text-xl"></i> Chalés</h4>
+              <p class="text-sm text-brand-text/70 mb-3 flex-1">Privacidade total com vista privilegiada.</p>
+              <p class="text-brand-text font-bold text-lg mb-4">A partir de R$ 450,00</p>
+              <button onclick="openModal('chale')" class="w-full bg-brand-text text-white hover:bg-black py-2.5 rounded-lg flex justify-center items-center gap-2 font-medium transition-colors shadow-sm">
+                Ver Chalés <i class="ph ph-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-text text-white/80 py-16 px-4 mt-20 border-t-4 border-brand-green">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div class="col-span-1 md:col-span-1">
+        <div class="flex items-center gap-3 mb-6">
+          <img src="images/logo.png" alt="Logo" class="h-12 w-auto object-contain rounded-md brightness-0 invert opacity-90">
+        </div>
+        <p class="text-sm leading-relaxed mb-6">Experiências premium em meio à natureza exuberante de Minas Gerais.</p>
+        <div class="flex items-center gap-4">
+          <a href="https://instagram.com/pousadaserraverde_capitolio" target="_blank"
+            class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-green transition-colors text-white"
+            title="@pousadaserraverde_capitolio"><i class="ph ph-instagram-logo text-xl"></i></a>
+          <a href="#"
+            class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-green transition-colors text-white"><i
+              class="ph ph-facebook-logo text-xl"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">A Pousada</h4>
+        <ul class="space-y-3 text-sm">
+          <li><a href="#" class="hover:text-brand-green transition-colors">Sobre Nós</a></li>
+          <li><a href="#" class="hover:text-brand-green transition-colors">Acomodações</a></li>
+          <li><a href="#" class="hover:text-brand-green transition-colors">Gastronomia</a></li>
+          <li><a href="#" class="hover:text-brand-green transition-colors">Como Chegar</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">Suporte</h4>
+        <ul class="space-y-3 text-sm">
+          <li><a href="#" class="hover:text-brand-green transition-colors">Perguntas Frequentes</a></li>
+          <li><a href="#" class="hover:text-brand-green transition-colors">Políticas de Cancelamento</a></li>
+          <li><a href="#" class="hover:text-brand-green transition-colors">Termos de Responsabilidade</a></li>
+          <li><a href="#" class="hover:text-brand-green transition-colors">Contato</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-medium mb-6 uppercase tracking-wider text-sm">Contato</h4>
+        <ul class="space-y-4 text-sm">
+          <li class="flex items-start gap-3">
+            <i class="ph ph-map-pin text-xl text-brand-green shrink-0 mt-0.5"></i>
+            <span>Estrada do Sol, Km 12<br>Capitolio - MG</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <i class="ph ph-whatsapp-logo text-xl text-brand-green shrink-0"></i>
+            <span>(35) 99876-5432</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <i class="ph ph-envelope-simple text-xl text-brand-green shrink-0"></i>
+            <span>reservas@serraverde.com.br</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/10 text-sm text-center text-white/50 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p>&copy; 2026 Pousada Rural Serra Verde. Todos os direitos reservados.</p>
+      <p>Desenvolvido para encantar.</p>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp -->
+  <a href="#"
+    class="fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center text-3xl shadow-float hover:scale-110 transition-transform z-30">
+    <i class="ph ph-whatsapp-logo"></i>
+  </a>
+
+  <!-- RESERVATION MODAL (INJETADO VIA SCRIPT) -->
+  <div id="booking-modal"
+    class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/60" onclick="closeModal()"></div>
+
+    <!-- Modal Content Container -->
+    <div
+      class="relative w-full max-w-5xl h-[100dvh] md:h-[90vh] md:max-h-[850px] bg-brand-bg md:rounded-3xl shadow-2xl flex flex-col md:flex-row overflow-hidden transform translate-y-8 transition-transform duration-500 delay-100"
+      id="modal-panel">
+
+      <!-- Left/Main Area (Dynamic Steps) -->
+      <div class="flex-1 flex flex-col h-full bg-white relative overflow-hidden">
+        <!-- Modal Header -->
+        <div class="px-4 py-4 md:px-8 md:py-6 border-b border-brand-border flex flex-col gap-4 bg-white z-20">
+          <div class="flex items-center justify-between">
+            <button id="btn-back"
+              class="w-10 h-10 rounded-full hover:bg-brand-bg flex items-center justify-center transition-colors text-brand-text disabled:opacity-30 disabled:pointer-events-none"
+              onclick="prevStep()">
+              <i class="ph ph-arrow-left text-xl"></i>
+            </button>
+            <h2 id="modal-title" class="font-serif font-medium tracking-tight text-lg md:text-xl text-center flex-1 mx-2 truncate">
+              Agendar Passeio</h2>
+            <button
+              class="w-10 h-10 rounded-full hover:bg-brand-bg flex items-center justify-center transition-colors text-brand-text"
+              onclick="closeModal()">
+              <i class="ph ph-x text-xl"></i>
+            </button>
+          </div>
+          <!-- Progress Bar (6 steps guiados + 1 checkout) -->
+          <div class="flex gap-1.5 w-full h-1.5">
+            <div class="step-indicator flex-1 rounded-full bg-brand-border overflow-hidden">
+              <div class="h-full bg-brand-green w-0 transition-all duration-300" id="prog-1"></div>
+            </div>
+            <div class="step-indicator flex-1 rounded-full bg-brand-border overflow-hidden">
+              <div class="h-full bg-brand-green w-0 transition-all duration-300" id="prog-2"></div>
+            </div>
+            <div class="step-indicator flex-1 rounded-full bg-brand-border overflow-hidden">
+              <div class="h-full bg-brand-green w-0 transition-all duration-300" id="prog-3"></div>
+            </div>
+            <div class="step-indicator flex-1 rounded-full bg-brand-border overflow-hidden">
+              <div class="h-full bg-brand-green w-0 transition-all duration-300" id="prog-4"></div>
+            </div>
+            <div class="step-indicator flex-1 rounded-full bg-brand-border overflow-hidden">
+              <div class="h-full bg-brand-green w-0 transition-all duration-300" id="prog-5"></div>
+            </div>
+            <div class="step-indicator flex-1 rounded-full bg-brand-border overflow-hidden">
+              <div class="h-full bg-brand-green w-0 transition-all duration-300" id="prog-6"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Steps Container (Scrollable) -->
+        <div class="flex-1 overflow-y-auto overflow-x-hidden relative scrollbar-hide" id="steps-container">
+          <!-- Steps will be injected here by script.js -->
+        </div>
+
+        <!-- Modal Footer Actions (Mobile Bottom Bar) -->
+        <div
+          class="p-4 md:p-6 border-t border-brand-border bg-white z-20 flex justify-end items-center mt-auto shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.05)]">
+          <button id="btn-next"
+            class="w-full md:w-auto bg-brand-green hover:bg-brand-green/90 text-white font-medium py-3.5 px-8 rounded-xl transition-all shadow-md flex justify-center items-center gap-2"
+            onclick="nextStep()">
+            Continuar
+            <i class="ph ph-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Area (Fixed Summary Desktop) -->
+      <div class="hidden md:flex w-80 bg-brand-bg flex-col border-l border-brand-border z-10" id="summary-panel">
+        <div class="p-6 border-b border-brand-border">
+          <h3 class="font-serif font-medium text-lg text-brand-text mb-4">Resumo da Reserva</h3>
+
+          <div class="rounded-xl overflow-hidden mb-4 relative h-32">
+            <img id="summary-img" src="" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <p id="summary-title"
+              class="absolute bottom-3 left-3 right-3 text-white font-medium text-sm drop-shadow-md"></p>
+          </div>
+
+          <ul class="space-y-4 text-sm mt-6">
+            <li class="flex items-start gap-3">
+              <i class="ph ph-calendar-blank text-lg text-brand-text/50 mt-0.5"></i>
+              <div>
+                <p class="text-brand-text/60 text-xs uppercase tracking-wider mb-0.5">Data</p>
+                <p class="font-medium text-brand-text" id="sum-date">Selecione uma data</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="ph ph-clock text-lg text-brand-text/50 mt-0.5"></i>
+              <div>
+                <p class="text-brand-text/60 text-xs uppercase tracking-wider mb-0.5">Horário</p>
+                <p class="font-medium text-brand-text" id="sum-time">-</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="ph ph-users text-lg text-brand-text/50 mt-0.5"></i>
+              <div>
+                <p class="text-brand-text/60 text-xs uppercase tracking-wider mb-0.5">Participantes</p>
+                <p class="font-medium text-brand-text" id="sum-pax">-</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="p-6 mt-auto bg-brand-green-light/30">
+          <div class="flex justify-between items-end">
+            <span class="text-sm font-medium text-brand-text/70">Total</span>
+            <span class="text-2xl font-bold text-brand-green" id="sum-total">R$ 0,00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+
+</html>
