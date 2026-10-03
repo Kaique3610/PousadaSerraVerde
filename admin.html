@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel administrativo | Serra Verde</title>
+  <link rel="icon" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link rel="stylesheet" href="admin.css">
+  <script src="reservations-store.js" defer></script>
+  <script src="admin.js" defer></script>
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html" aria-label="Voltar ao site da Serra Verde"><img src="images/logo.png" alt="Serra Verde Pousada Rural"></a>
+      <p class="nav-label">GESTÃO DA POUSADA</p>
+      <nav aria-label="Painel administrativo">
+        <button class="nav-item active" data-view="overview" aria-current="page"><i class="ph ph-squares-four" aria-hidden="true"></i> Visão geral</button>
+        <button class="nav-item" data-view="agenda"><i class="ph ph-calendar-blank" aria-hidden="true"></i> Agenda de passeios</button>
+        <button class="nav-item" data-view="reservations"><i class="ph ph-ticket" aria-hidden="true"></i> Reservas</button>
+      </nav>
+      <div class="sidebar-bottom"><p>Serra Verde<br><span>Cuidado em cada experiência.</span></p><a href="index.html"><i class="ph ph-arrow-up-right" aria-hidden="true"></i> Visitar o site</a></div>
+    </aside>
+    <main>
+      <header class="topbar"><span>Painel administrativo</span><span class="user-avatar" aria-label="Equipe Serra Verde">SV</span></header>
+      <div class="page-content">
+        <div class="demo-notice"><i class="ph ph-info" aria-hidden="true"></i><p><strong>Prévia do painel</strong> · Exemplos fictícios e reservas criadas neste navegador. Sem pagamentos reais. Data de referência: 03/10/2026.</p></div>
+        <div class="page-heading"><div><p class="eyebrow">SERRA VERDE · PASSEIOS</p><h1 id="page-title">Um olhar sobre o seu dia</h1><p id="page-description">Acompanhe as reservas e prepare a equipe para cada experiência.</p></div><span class="date-pill"><i class="ph ph-calendar-blank" aria-hidden="true"></i> Sábado, 03 de outubro</span></div>
+
+        <section id="overview-view" aria-label="Visão geral">
+          <div id="metrics" class="metrics"></div>
+          <div class="overview-columns">
+            <section class="panel"><div class="panel-heading"><div><h2>Saídas de hoje</h2><p>Participantes confirmados por atividade.</p></div><button class="text-button" data-open-view="agenda">Ver agenda <i class="ph ph-arrow-right" aria-hidden="true"></i></button></div><div id="today-departures"></div></section>
+            <section class="panel"><div class="panel-heading"><div><h2>Atenção da equipe</h2><p>O que precisa de acompanhamento.</p></div><i class="ph ph-bell" aria-hidden="true"></i></div><div id="attention-list"></div><div class="contact-note"><i class="ph ph-whatsapp-logo" aria-hidden="true"></i><p><strong>Hospedagem pelo WhatsApp</strong><br>Quartos e chalés são combinados diretamente com a equipe.</p></div></section>
+          </div>
+          <section class="panel recent-panel"><div class="panel-heading"><div><h2>Últimas reservas</h2><p>As solicitações mais recentes dos seus visitantes.</p></div><button class="text-button" data-open-view="reservations">Ver todas <i class="ph ph-arrow-right" aria-hidden="true"></i></button></div><div id="recent-reservations"></div></section>
+        </section>
+
+        <section id="workspace-view" hidden aria-label="Consultar passeios e reservas">
+          <div class="filters panel">
+            <label class="search-filter">Buscar reserva<div class="search-input"><i class="ph ph-magnifying-glass" aria-hidden="true"></i><input id="filter-search" type="search" placeholder="Nome ou código da reserva"></div></label>
+            <label>Data<input id="filter-date" type="date"></label>
+            <label>Passeio<select id="filter-tour"><option value="">Todos os passeios</option><option value="horse">Cavalgada ao Pôr do Sol</option><option value="boat">Passeio de Lancha VIP</option><option value="dayuse">Day-Use Serra Verde</option></select></label>
+            <label>Status da reserva<select id="filter-status"><option value="">Todos os status</option><option>Confirmada</option><option>Pendente</option><option>Cancelada</option><option>Concluída</option></select></label>
+            <button id="clear-filters" class="secondary-button">Limpar filtros</button>
+          </div>
+          <section class="panel"><div class="panel-heading"><div><h2 id="results-title">Reservas</h2><p id="results-count" role="status"></p></div><div id="agenda-controls" class="agenda-controls" hidden><button id="previous-day" class="icon-button" aria-label="Dia anterior"><i class="ph ph-caret-left" aria-hidden="true"></i></button><button id="reference-day" class="secondary-button">03 de outubro</button><button id="next-day" class="icon-button" aria-label="Próximo dia"><i class="ph ph-caret-right" aria-hidden="true"></i></button></div></div><div id="workspace-results"></div></section>
+        </section>
+        <footer class="page-footer">Pousada Rural Serra Verde · Gestão de experiências</footer>
+      </div>
+    </main>
+  </div>
+  <dialog id="reservation-dialog" aria-labelledby="detail-title"><div class="detail-header"><div><p class="eyebrow">DETALHES DA RESERVA</p><h2 id="detail-title"></h2></div><button id="close-details" class="icon-button" aria-label="Fechar detalhes"><i class="ph ph-x" aria-hidden="true"></i></button></div><div id="reservation-details"></div><div class="detail-footer"><button id="close-details-footer" class="secondary-button">Voltar ao painel</button></div></dialog>
+</body>
+</html>

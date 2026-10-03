@@ -1,5 +1,16 @@
 /* Custom Styles and Animations for Pousada Serra Verde */
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
 @layer utilities {
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
@@ -184,6 +195,74 @@
 }
 
 /* Header sticky glass */
+.room-carousel-viewport {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    background: #f3f4f6;
+    aspect-ratio: 16 / 10;
+    touch-action: pan-y;
+}
+.room-carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.room-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1E2322;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+.room-carousel-arrow:hover { background: #E3EFE8; }
+.room-carousel-prev { left: 12px; }
+.room-carousel-next { right: 12px; }
+.room-carousel-count {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 12px;
+}
+.room-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    margin-top: 6px;
+}
+.room-carousel-dot {
+    width: 28px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.room-carousel-dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d1d5db;
+}
+.room-carousel-dot.is-active::before { background: #1E6B3E; }
+.room-carousel button:focus-visible {
+    outline: 2px solid #1E6B3E;
+    outline-offset: 3px;
+}
+
 .header-scrolled {
     background-color: rgba(255, 255, 255, 0.98);
     box-shadow: 0 4px 12px rgba(0,0,0,0.03);

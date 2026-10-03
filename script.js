@@ -30,12 +30,12 @@ const tours = {
     quarto: {
         title: 'Quarto Pousada',
         img: 'images/background1.jpeg',
-        images: ['images/background1.jpeg', 'images/background1.jpeg', 'images/background1.jpeg', 'images/background1.jpeg', 'images/background1.jpeg', 'images/background1.jpeg'],
+        images: ['images/quartos/img1.jpeg', 'images/quartos/img2-1.jpeg', 'images/quartos/img3.jpeg', 'images/quartos/img4.jpeg', 'images/quartos/img5.jpeg', 'images/quartos/img6.jpeg'],
         priceAdult: 350,
         priceChild: 0,
         maxPax: 4,
         desc: 'Venha se hospedar na pousada serra verde! Nossos quartos oferecem conforto ideal para famílias.',
-        req: ['Café da manhã incluso', 'Suítes', 'Todos quartos possuem frigobar e ventilador']
+        req: ['Café da manhã incluso', 'Suítes', 'Frigobar e Ventilador']
     },
     chale: {
         title: 'Chalé Privativo',
@@ -45,7 +45,7 @@ const tours = {
         priceChild: 0,
         maxPax: 2,
         desc: 'Venha se hospedar na pousada serra verde! Nossos chalés garantem total privacidade, com uma vista deslumbrante.',
-        req: ['Café da manhã incluso', 'Lareira e Banheira', 'Ideal para casais']
+        req: ['Café da manhã incluso', 'Lareira e Redes', 'Ideal para casais']
     }
 };
 
@@ -62,6 +62,7 @@ let bookingData = {
     tour: null
 };
 let timerInterval = null;
+let navigationScrollFrame = null;
 
 // --- DOM Elements ---
 const modal = document.getElementById('booking-modal');
@@ -83,6 +84,19 @@ const sumTotal = document.getElementById('sum-total');
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
     buildStepsHTML();
+    document.addEventListener('click', event => {
+        const link = event.target.closest('a[href^="#"]');
+        if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        const href = link.getAttribute('href');
+        if (href === '#') return;
+        const target = document.getElementById(href.slice(1));
+        if (!target) return;
+        event.preventDefault();
+        smoothScrollToSection(target);
+    });
+    ['wheel', 'touchstart'].forEach(type => {
+        window.addEventListener(type, () => cancelAnimationFrame(navigationScrollFrame), { passive: true });
+    });
     
     // Hero Carousel Logic
     const slides = document.querySelectorAll('.hero-slide');
@@ -116,12 +130,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Animate anchor navigation explicitly, independently of native smooth scrolling.
+function smoothScrollToSection(target) {
+    cancelAnimationFrame(navigationScrollFrame);
+    const start = window.scrollY;
+    const headerOffset = mainHeader.getBoundingClientRect().height + 16;
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const destination = Math.min(maxScroll, Math.max(0, start + target.getBoundingClientRect().top - headerOffset));
+    const distance = destination - start;
+    const duration = Math.min(1100, Math.max(650, Math.abs(distance) * 0.6));
+    const startedAt = performance.now();
+    function animate(now) {
+        const progress = Math.min(1, (now - startedAt) / duration);
+        const eased = progress < 0.5
+            ? 4 * progress * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        window.scrollTo({ top: start + distance * eased, behavior: 'instant' });
+        navigationScrollFrame = progress < 1 ? requestAnimationFrame(animate) : null;
+    }
+    navigationScrollFrame = requestAnimationFrame(animate);
+}
+
 function scrollToTours() {
     const activity = document.getElementById('quick-activity').value;
     if (activity) {
         openModal(activity);
     } else {
-        document.getElementById('passeios').scrollIntoView({ behavior: 'smooth' });
+        smoothScrollToSection(document.getElementById('passeios'));
     }
 }
 
@@ -138,7 +173,13 @@ function openModal(tourId) {
     const tour = tours[tourId];
     
     const gallery = document.getElementById('st1-gallery');
-    if (tour.images) {
+    gallery.onkeydown = null;
+    gallery.removeAttribute('role');
+    gallery.removeAttribute('aria-label');
+    const isAccommodation = tourId === 'quarto' || tourId === 'chale';
+    if (isAccommodation && tour.images) {
+        buildRoomCarousel(gallery, tour.images, tour.title);
+    } else if (tour.images) {
         gallery.className = 'grid grid-cols-2 md:grid-cols-3 gap-2 mb-6';
         gallery.innerHTML = tour.images.map(src => `<img src="${src}" class="w-full h-24 md:h-32 object-cover rounded-lg">`).join('');
     } else {
@@ -149,6 +190,19 @@ function openModal(tourId) {
     document.getElementById('st1-desc').textContent = tour.desc;
     document.getElementById('st1-price-adult').textContent = `R$ ${tour.priceAdult}`;
     document.getElementById('st1-price-child').textContent = `R$ ${tour.priceChild}`;
+    document.getElementById('st1-standard-prices').hidden = isAccommodation;
+    const accommodationPrices = document.getElementById('st1-room-prices');
+    accommodationPrices.hidden = !isAccommodation;
+    if (isAccommodation) {
+        const label = tourId === 'quarto' ? 'Quarto' : 'Chalé';
+        const prices = tourId === 'quarto' ? [350, 450, 550] : [450, 550, 650];
+        accommodationPrices.querySelectorAll('[data-room-label]').forEach((el, index) => {
+            el.textContent = `${label} ${['duplo', 'triplo', 'quádruplo'][index]}`;
+        });
+        accommodationPrices.querySelectorAll('[data-room-price]').forEach((el, index) => {
+            el.textContent = `R$ ${prices[index].toFixed(2).replace('.', ',')}`;
+        });
+    }
     
     if (tourId === 'quarto' || tourId === 'chale') {
         document.getElementById('st1-label-adult').textContent = 'Diária (Adulto)';
@@ -191,6 +245,47 @@ function openModal(tourId) {
     }, 50);
 }
 
+// Room gallery: manual navigation keeps the prototype easy to present.
+function buildRoomCarousel(gallery, images, title) {
+    gallery.className = 'room-carousel mb-6';
+    gallery.setAttribute('role', 'region');
+    gallery.setAttribute('aria-label', `Fotos de ${title}`);
+    gallery.innerHTML = `
+        <div class="room-carousel-viewport">
+            <img class="room-carousel-image" src="${images[0]}" alt="${title} — foto 1 de ${images.length}">
+            <button type="button" class="room-carousel-arrow room-carousel-prev" aria-label="Foto anterior"><i class="ph ph-caret-left" aria-hidden="true"></i></button>
+            <button type="button" class="room-carousel-arrow room-carousel-next" aria-label="Próxima foto"><i class="ph ph-caret-right" aria-hidden="true"></i></button>
+            <span class="room-carousel-count" aria-live="polite">1 / ${images.length}</span>
+        </div>
+        <div class="room-carousel-dots" aria-label="Escolher foto">
+            ${images.map((_, index) => `<button type="button" class="room-carousel-dot${index === 0 ? ' is-active' : ''}" aria-label="Ver foto ${index + 1}" aria-pressed="${index === 0}"></button>`).join('')}
+        </div>
+    `;
+    let currentIndex = 0;
+    const image = gallery.querySelector('.room-carousel-image');
+    const count = gallery.querySelector('.room-carousel-count');
+    const dots = gallery.querySelectorAll('.room-carousel-dot');
+    function showPhoto(index) {
+        currentIndex = (index + images.length) % images.length;
+        image.src = images[currentIndex];
+        image.alt = `${title} — foto ${currentIndex + 1} de ${images.length}`;
+        count.textContent = `${currentIndex + 1} / ${images.length}`;
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('is-active', i === currentIndex);
+            dot.setAttribute('aria-pressed', String(i === currentIndex));
+        });
+    }
+    gallery.querySelector('.room-carousel-prev').addEventListener('click', () => showPhoto(currentIndex - 1));
+    gallery.querySelector('.room-carousel-next').addEventListener('click', () => showPhoto(currentIndex + 1));
+    dots.forEach((dot, index) => dot.addEventListener('click', () => showPhoto(index)));
+    gallery.onkeydown = event => {
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+            event.preventDefault();
+            showPhoto(currentIndex + (event.key === 'ArrowRight' ? 1 : -1));
+        }
+    };
+}
+
 function closeModal() {
     modalPanel.classList.add('translate-y-8');
     setTimeout(() => {
@@ -200,6 +295,15 @@ function closeModal() {
 }
 
 function nextStep() {
+    if (currentTourId === 'quarto' || currentTourId === 'chale') {
+        if (currentStep === 1) {
+            currentStep = 2;
+            updateModalUI();
+        } else {
+            document.getElementById('accommodation-contact-status').hidden = false;
+        }
+        return;
+    }
     if (!validateCurrentStep()) return;
     
     if (currentStep < totalSteps) {
@@ -230,6 +334,11 @@ function nextStep() {
 }
 
 function prevStep() {
+    if (currentTourId === 'quarto' || currentTourId === 'chale') {
+        currentStep = 1;
+        updateModalUI();
+        return;
+    }
     if (currentStep > 1) {
         document.getElementById(`step-${currentStep}`).classList.remove('active');
         currentStep--;
@@ -280,7 +389,34 @@ function validateCurrentStep() {
 
 function updateModalUI() {
     const tour = tours[currentTourId];
+    const isAccommodation = currentTourId === 'quarto' || currentTourId === 'chale';
+    document.getElementById('summary-panel').classList.toggle('md:flex', !isAccommodation);
+    document.getElementById('summary-panel').classList.add('hidden');
+    document.getElementById('accommodation-contact').classList.remove('active');
+    document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+        indicator.hidden = isAccommodation && index >= 2;
+    });
+    if (isAccommodation) {
+        document.querySelectorAll('.step-pane').forEach(pane => pane.classList.remove('active'));
+        document.getElementById(currentStep === 1 ? 'step-1' : 'accommodation-contact').classList.add('active');
+        modalTitle.textContent = currentStep === 1 ? 'Detalhes da Hospedagem' : 'Consultar pelo WhatsApp';
+        btnBack.disabled = currentStep === 1;
+        btnNext.innerHTML = currentStep === 1
+            ? 'Consultar disponibilidade <i class="ph ph-arrow-right" aria-hidden="true"></i>'
+            : 'Falar no WhatsApp <i class="ph ph-whatsapp-logo text-xl" aria-hidden="true"></i>';
+        document.getElementById('accommodation-contact-status').hidden = true;
+        const accommodation = currentTourId === 'quarto' ? 'um quarto' : 'um chalé';
+        document.getElementById('accommodation-contact-message').textContent = `Olá! Vi o site e gostaria de consultar a disponibilidade de ${accommodation} na Pousada Serra Verde.`;
+        for (let i = 1; i <= 2; i++) {
+            document.getElementById(`prog-${i}`).style.width = i <= currentStep ? '100%' : '0%';
+        }
+        stepsContainer.scrollTo(0, 0);
+        return;
+    }
     
+    document.querySelectorAll('.step-pane').forEach(pane => {
+        pane.classList.toggle('active', pane.id === `step-${currentStep}`);
+    });
     // Titles
     const titles = {
         1: 'Detalhes da Atividade',
@@ -518,16 +654,32 @@ function copyPix(btn) {
 
 function confirmBooking() {
     // Save to local storage
-    const reserves = JSON.parse(localStorage.getItem('serra_verde_reserves') || '[]');
-    reserves.push({
+    const participants = Array.from(document.querySelectorAll('#participants-container > div')).map(row => ({
+        name: row.querySelector('input[type="text"]').value.trim(),
+        age: Number(row.querySelector('input[type="number"]').value)
+    }));
+    try {
+    window.PrototypeReservations.save({
         id: Math.random().toString(36).substr(2, 9),
+        tourId: currentTourId,
         tour: tours[currentTourId].title,
+        name: document.getElementById('form-name').value.trim(),
+        phone: document.getElementById('form-phone').value.trim(),
+        adults: bookingData.adults,
+        children: bookingData.children,
+        participants,
         date: bookingData.date,
+        dateISO: window.PrototypeReservations.toISODate(bookingData.date),
         time: bookingData.time,
         total: bookingData.totalPrice,
-        status: 'Confirmada'
+        status: 'Confirmada',
+        payment: 'Pendente',
+        createdAt: new Date().toISOString()
     });
-    localStorage.setItem('serra_verde_reserves', JSON.stringify(reserves));
+    } catch {
+        alert('Não foi possível salvar a reserva neste navegador. Verifique se o armazenamento local está permitido e tente novamente.');
+        return;
+    }
     
     closeModal();
     
@@ -538,7 +690,7 @@ function confirmBooking() {
 }
 
 function openMyReservations() {
-    const reserves = JSON.parse(localStorage.getItem('serra_verde_reserves') || '[]');
+    const reserves = window.PrototypeReservations.read();
     if (reserves.length === 0) {
         alert('Você ainda não possui reservas.');
         return;
@@ -554,16 +706,40 @@ function openMyReservations() {
 // --- HTML Builder ---
 function buildStepsHTML() {
     stepsContainer.innerHTML = `
+        <div class="step-pane p-4 md:p-8" id="accommodation-contact">
+            <div class="max-w-xl mx-auto py-6 md:py-10 text-center">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-brand-green-light text-brand-green flex items-center justify-center">
+                    <i class="ph ph-whatsapp-logo text-4xl" aria-hidden="true"></i>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-serif font-medium mb-4">Vamos combinar sua estadia?</h3>
+                <p class="text-brand-text/70 leading-relaxed mb-6">Sua hospedagem será combinada diretamente com nossa equipe pelo WhatsApp. Vamos ajudar você a escolher a acomodação ideal e confirmar a disponibilidade para as datas desejadas.</p>
+                <div class="bg-brand-bg border border-brand-border rounded-xl p-5 text-left mb-6">
+                    <h4 class="font-medium mb-3">No atendimento, nossa equipe confirma:</h4>
+                    <ul class="text-sm text-brand-text/70 space-y-2">
+                        <li class="flex items-center gap-2"><i class="ph ph-calendar-check text-brand-green" aria-hidden="true"></i> Datas e disponibilidade</li>
+                        <li class="flex items-center gap-2"><i class="ph ph-users text-brand-green" aria-hidden="true"></i> Quantidade de hóspedes e acomodação</li>
+                        <li class="flex items-center gap-2"><i class="ph ph-currency-circle-dollar text-brand-green" aria-hidden="true"></i> Valores e condições da estadia</li>
+                    </ul>
+                </div>
+                <div class="text-left border border-brand-green/20 bg-brand-green-light/30 rounded-xl p-5">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-brand-green mb-2">Sua mensagem</p>
+                    <p id="accommodation-contact-message" class="text-sm text-brand-text/80 leading-relaxed"></p>
+                </div>
+                <p class="text-xs text-brand-text/60 mt-5">A reserva será confirmada pela nossa equipe durante o atendimento.</p>
+                <p id="accommodation-contact-status" class="mt-5 p-4 rounded-xl bg-brand-green-light text-brand-green text-sm" role="status" hidden>Esta é uma demonstração do contato pelo WhatsApp. O link de atendimento será disponibilizado em breve.</p>
+            </div>
+        </div>
         <!-- Step 1 -->
         <div class="step-pane p-4 md:p-8 active" id="step-1">
             <div id="st1-gallery" class="mb-6">
-                <!-- Javascript will inject single image or grid here -->
+                <!-- Javascript will inject the activity gallery here -->
             </div>
             <p id="st1-desc" class="text-brand-text/80 mb-6 leading-relaxed"></p>
             <div class="bg-[#FBF9F4] p-5 rounded-xl border border-brand-border mb-6">
                 <h4 class="font-medium mb-3 flex items-center gap-2"><i class="ph ph-warning-circle text-brand-yellow"></i> Requisitos e Observações</h4>
                 <ul id="st1-req" class="text-sm text-brand-text/70 space-y-2 list-disc pl-5"></ul>
             </div>
+            <div id="st1-standard-prices">
             <div class="flex justify-between items-center p-4 border border-brand-border rounded-xl">
                 <div><p class="font-medium" id="st1-label-adult">Adulto</p><p class="text-sm text-brand-text/60" id="st1-sub-adult">A partir de 8 anos</p></div>
                 <div class="font-bold text-lg" id="st1-price-adult"></div>
@@ -571,6 +747,19 @@ function buildStepsHTML() {
             <div class="flex justify-between items-center p-4 border border-brand-border rounded-xl mt-3">
                 <div><p class="font-medium" id="st1-label-child">Criança</p><p class="text-sm text-brand-text/60" id="st1-sub-child">De 0 a 7 anos</p></div>
                 <div class="font-bold text-lg" id="st1-price-child"></div>
+            </div>
+            </div>
+            <div id="st1-room-prices" hidden>
+                <div class="flex justify-between items-center gap-4 p-4 border border-brand-border rounded-xl">
+                    <p class="font-medium" data-room-label>Quarto duplo</p><p class="font-bold text-lg whitespace-nowrap" data-room-price>R$ 350,00</p>
+                </div>
+                <div class="flex justify-between items-center gap-4 p-4 border border-brand-border rounded-xl mt-3">
+                    <p class="font-medium" data-room-label>Quarto triplo</p><p class="font-bold text-lg whitespace-nowrap" data-room-price>R$ 450,00</p>
+                </div>
+                <div class="flex justify-between items-center gap-4 p-4 border border-brand-border rounded-xl mt-3">
+                    <p class="font-medium" data-room-label>Quarto quádruplo</p><p class="font-bold text-lg whitespace-nowrap" data-room-price>R$ 550,00</p>
+                </div>
+                <p class="text-sm text-brand-text/60 mt-4 flex items-start gap-2"><i class="ph ph-info mt-0.5" aria-hidden="true"></i><span>Valores sujeitos a alterações em feriados.</span></p>
             </div>
         </div>
         
