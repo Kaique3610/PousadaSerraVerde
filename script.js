@@ -2,7 +2,7 @@
 const tours = {
     horse: {
         title: 'Cavalgada ao Pôr do Sol',
-        img: 'images/pousada.jpg',
+        img: 'images/gpt-cavalo.png',
         priceAdult: 90,
         priceChild: 60,
         maxPax: 8,
@@ -11,7 +11,7 @@ const tours = {
     },
     boat: {
         title: 'Passeio de Lancha VIP',
-        img: 'images/pousada2.jpg',
+        img: 'images/gpt-lancha.png',
         priceAdult: 250,
         priceChild: 150,
         maxPax: 6,
@@ -20,7 +20,7 @@ const tours = {
     },
     dayuse: {
         title: 'Day-Use Serra Verde',
-        img: 'images/dayuse1.jpg',
+        img: 'images/gpt-dayuse.png',
         priceAdult: 50,
         priceChild: 0,
         maxPax: 20,
